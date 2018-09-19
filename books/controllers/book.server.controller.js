@@ -12,7 +12,7 @@ const getAll = async(req, res) => {
 
 const getOne = async(req, res) => {
     try{
-        const book = await Book.findOne({bookId: req.params.id.toUpperCase()}).select({_id: 0, _v: 0});
+        const book = await Book.findOne({title: req.params.title.toUpperCase()}).select({_id: 0, _v: 0});
 
         if(!book) return res.status(404).send({message: 'Livro não encontrado'});
 
@@ -26,6 +26,7 @@ const getOne = async(req, res) => {
 const create = async(req, res) => {
     try{
         const newBook = new Book(req.body);
+        newBook.title = newBook.title.toUpperCase();
 
         await newBook.save(function (err) {
             if(!err){
@@ -48,7 +49,7 @@ const create = async(req, res) => {
 
 const update = async(req, res) => {
     try{
-        const book = await Book.findOne({bookId: req.params.id.toUpperCase()});
+        const book = await Book.findOne({title: req.params.title.toUpperCase()});
         console.log(book);
 
         if(!book) return res.status(404).send({message: 'Livro não encontrado'});
@@ -63,7 +64,7 @@ const update = async(req, res) => {
 
 const remove = async(req, res) => {
     try{
-        const book = await Book.findOneAndRemove({bookId: req.params.id.toUpperCase()}).select({_id: 0, _v: 0});
+        const book = await Book.findOneAndRemove({title: req.params.title.toUpperCase()}).select({_id: 0, _v: 0});
 
         if(!book) return res.status(404).send({message: 'Livro não encontrado'});
 

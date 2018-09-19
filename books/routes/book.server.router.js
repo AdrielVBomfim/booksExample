@@ -5,7 +5,7 @@ module.exports = (booksRouter) => {
     booksRouter.route('/')
         .get(bookController.getAll)
         .post(bookController.create);
-    booksRouter.route('/:id')
+    booksRouter.route('/:title')
         .get(bookController.getOne)
         .put(bookController.update)
         .delete(bookController.remove);
