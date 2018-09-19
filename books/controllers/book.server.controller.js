@@ -36,7 +36,7 @@ const create = async(req, res) => {
                 return res.status(400).send({message: 'Livro já está cadastrado'});
             }
             else{
-                return res.status(400).send();
+                return res.status(500).send({error: err, message: 'Erro interno do servidor'});
             }
         });
 
