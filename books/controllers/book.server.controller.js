@@ -14,8 +14,7 @@ const getOne = async(req, res) => {
     try{
         const book = await Book.findOne({bookId: req.params.id.toUpperCase()}).select({_id: 0, _v: 0});
 
-        if(!book)
-            return res.status(404).send({message: 'Livro não encontrado'});
+        if(!book) return res.status(404).send({message: 'Livro não encontrado'});
 
         return res.status(200).send(book);
     }
@@ -27,11 +26,20 @@ const getOne = async(req, res) => {
 const create = async(req, res) => {
     try{
         const newBook = new Book(req.body);
-        newBook.bookId = require('mongoose').Types.ObjectId();
 
-        newBook.save();
+        await newBook.save(function (err) {
+            if(!err){
+                return res.status(201).send({message: 'Livro cadastrado com sucesso'});
+            }
+            else if(err.code === 11000){
+                console.log(err);
+                return res.status(400).send({message: 'Livro já está cadastrado'});
+            }
+            else{
+                return res.status(400).send();
+            }
+        });
 
-        return res.status(201).send({message: 'Livro cadastrado com sucesso'});
     }
     catch (err){
         return res.status(500).send({error: err, message: 'Erro interno do servidor'});
@@ -43,8 +51,7 @@ const update = async(req, res) => {
         const book = await Book.findOne({bookId: req.params.id.toUpperCase()});
         console.log(book);
 
-        if(!book)
-            return res.status(404).send({message: 'Livro não encontrado'});
+        if(!book) return res.status(404).send({message: 'Livro não encontrado'});
 
         await Object.assign(book, req.body).save();
         return res.status(200).send({message: 'Livro atualizado'});
@@ -58,8 +65,7 @@ const remove = async(req, res) => {
     try{
         const book = await Book.findOneAndRemove({bookId: req.params.id.toUpperCase()}).select({_id: 0, _v: 0});
 
-        if(!book)
-            return res.status(404).send({message: 'Livro não encontrado'});
+        if(!book) return res.status(404).send({message: 'Livro não encontrado'});
 
         return res.status(200).send({message: 'Livro deletado com sucesso'});
     }
