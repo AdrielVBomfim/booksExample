@@ -26,7 +26,8 @@ const getOne = async(req, res) => {
 const create = async(req, res) => {
     try{
         const newBook = new Book(req.body);
-        newBook.title = newBook.title.toUpperCase();
+
+        if(!newBook.title) return res.status(400).send({message: 'Titulo do livro não foi mandado'});
 
         await newBook.save(function (err) {
             if(!err){
@@ -50,9 +51,10 @@ const create = async(req, res) => {
 const update = async(req, res) => {
     try{
         const book = await Book.findOne({title: req.params.title.toUpperCase()});
-        console.log(book);
 
         if(!book) return res.status(404).send({message: 'Livro não encontrado'});
+
+        if(req.body.title) delete req.body.title;
 
         await Object.assign(book, req.body).save();
         return res.status(200).send({message: 'Livro atualizado'});

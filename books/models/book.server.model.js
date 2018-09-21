@@ -5,7 +5,8 @@ const bookModel = new Schema({
     title: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        uppercase: true
     },
     author: {
         type: String

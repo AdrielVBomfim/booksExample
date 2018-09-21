@@ -1,6 +1,5 @@
 const request = require('supertest');
 const app = require('../../app');
-const mongoose = require('mongoose');
 
 beforeEach(async () => {
     await request(app)
@@ -9,7 +8,7 @@ beforeEach(async () => {
             title : 'Game of Thrones',
             author : 'George R.R Martin',
             genre : 'Fantasy',
-            read : false,
+            read : false
         });
 });
 
@@ -24,7 +23,7 @@ describe('Test GET /books', () => {
                 expect(Array.isArray(res.body)).toBeTruthy();
                 done();
             });
-    })
+    });
 });
 
 describe('Test GET /books/:title', () => {
@@ -41,10 +40,10 @@ describe('Test GET /books/:title', () => {
 
     it('It should not respond the GET method with a nonexistent book', (done) =>{
         request(app)
-            .get('/books/Livro Null')
+            .get('/books/Monogatari')
             .send()
             .expect(404, done);
-    })
+    });
 });
 
 afterEach(async () => {
